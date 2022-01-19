@@ -1,0 +1,30 @@
+body {
+  padding: 20px;
+}
+
+.table_padding {
+  padding: 10px;
+  text-align: center;
+}
+
+tr {
+  text-align: left;
+}
+
+.form {
+  padding: 10px;
+}
+
+.form label {
+  width: 200px;
+}
+
+.form input {
+  width: 40vh;
+  margin-left: 5px;
+}
+
+.form input[type="submit"] {
+  width: 10vw;
+  float: left;
+}
