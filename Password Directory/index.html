@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Enter Credentials</h1>
+    <div>
+      Name:
+      <input type="text" name="name" required /> <br />
+      URL:
+      <input type="text" name="url" required /> <br />
+      Username:
+      <input type="text" name="username" required /> <br />
+      Password:
+      <input type="password" name="password" required /> <br />
+      Hint:
+      <input type="text" name="hint" required /> <br />
+      <input type="submit" value="Submit" onclick="validateInput()" />
+    </div>
+
+    <br />
+    <br />
+    <h2>The Password Directory</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>URL</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Hint</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <script src="./src/js/index.js"></script>
+  </body>
+</html>

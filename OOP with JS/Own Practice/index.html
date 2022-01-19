@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Enter Person's Info</h2>
+
+    <form name="myForm" onsubmit="return validateForm()">
+      First Name: <input type="text" name="fname" required /> <br />
+      <br />
+      Last Name:
+      <input type="text" name="lname" required /> <br />
+      <br />
+      Birthday: <input type="date" id="dob" name="dob" required /> <br />
+      <br />
+      Country:
+      <input type="text" name="country" /> <br />
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+    <br /><br />
+
+    <div class="addPersonBtn">
+      <!-- <button id="0">Person 1</button> -->
+    </div>
+    <br />
+    <div class="showPersons">
+      <!-- <h4 id="fullname"></h4>
+      <h5 id="age"></h5> -->
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
