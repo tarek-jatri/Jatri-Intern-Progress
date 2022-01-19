@@ -132,7 +132,10 @@ function setInputFields(key, id) {
 function deleteFromDB(key, id) {
     const obj = JSON.parse(localStorage.getItem(key));
     console.log(obj);
-    obj.splice(id - 1, 1);
+    obj.splice(id, 1);
+    console.log(obj);
+    const objStr = JSON.stringify(obj);
+    localStorage.setItem(key, objStr);
     readAllFromDB(key);
 }
 
