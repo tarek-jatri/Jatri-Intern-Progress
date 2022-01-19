@@ -50,31 +50,30 @@ function clearInputFields() {
 
 
 // <<<<<<<<<<<<<<<<<< CRUD - Create >>>>>>>>>>>>>>>>>>>
-function insertToDB() {
+function insertToDB(key) {
     if (!validateInput())
         return;
-    const obj = createObject();
-    const strObj = JSON.stringify(obj);
-    // console.log(update);
+    if (!localStorage.getItem(key))
+        localStorage.setItem(key, '[{}]');
 
-    if (update.value) {
-        localStorage.setItem(update.key, strObj);
-        update.value = false;
-        update.key = 0;
-    } else {
-        const id = Object.keys(localStorage).length + 1;
-        localStorage.setItem(id, strObj);
-    }
-    readAllFromDB();
+    const prevObj = JSON.parse(localStorage.getItem(key));
+    const obj = createObject(prevObj.length);
+    prevObj.push(obj);
+
+    const strObj = JSON.stringify(prevObj);
+    // console.log(update);
+    localStorage.setItem(key, strObj);
+    readAllFromDB(key);
 }
 
-function createObject() {
+function createObject(id) {
     const name = document.querySelector("[name=name]").value.trim();
     const url = document.querySelector("[name=url]").value.trim();
     const username = document.querySelector("[name=username]").value.trim();
     const password = document.querySelector("[name=password]").value.trim();
     const hint = document.querySelector("[name=hint]").value.trim();
     const obj = {};
+    obj.id = id;
     obj.name = name;
     obj.url = url;
     obj.username = username;
@@ -89,54 +88,52 @@ function createObject() {
 
 
 // <<<<<<<<<<<<<<<<<< CRUD - Read >>>>>>>>>>>>>>>>>>>
-function readAllFromDB() {
-    const keys = Object.keys(localStorage).sort(function (a, b) {
-        return a - b;
-    });
-    console.log(keys);
-    const objects = keys
-        .map(function (key) {
-            const obj = JSON.parse(localStorage.getItem(key));
+function readAllFromDB(key) {
+    const objects = JSON.parse(localStorage.getItem(key));
+    objects.shift();
+    const objectsStr = objects
+        .map(function (obj) {
             return `<tr>
         <td>${obj.name}</td>
         <td>${obj.url}</td>
         <td>${obj.username}</td>
         <td>${obj.password}</td>
         <td>${obj.hint}</td>
-        <td><button id="key" onclick="updateToDB(${key})">Edit</button></td>
-        <td><button id="key" onclick="deleteFromDB(${key})">Delete</button></td>
+        <td><button id="key" onclick="updateToDB('${key}', ${obj.id})">Edit</button></td>
+        <td><button id="key" onclick="deleteFromDB('${key}', ${obj.id})">Delete</button></td>
       </tr>`;
         })
         .join("");
 
     const tableBody = document.getElementById("tbody");
-    tableBody.innerHTML = objects;
+    tableBody.innerHTML = objectsStr;
 }
 
 
 // <<<<<<<<<<<<<<<<<< CRUD - Update >>>>>>>>>>>>>>>>>>>
-function updateToDB(key) {
-    console.log(key);
-    setInputFields(key);
-    update.value = true;
-    update.key = key;
+function updateToDB(key, id) {
+    setInputFields(key, id);
+    // update.value = true;
+    // update.key = key;
 }
 
 
-function setInputFields(key) {
+function setInputFields(key, id) {
     const obj = JSON.parse(localStorage.getItem(key));
-    document.querySelector("[name=name]").value = obj.name;
-    document.querySelector("[name=url]").value = obj.url;
-    document.querySelector("[name=username]").value = obj.username;
-    document.querySelector("[name=password]").value = obj.password;
-    document.querySelector("[name=hint]").value = obj.hint;
+    document.querySelector("[name=name]").value = obj[id].name;
+    document.querySelector("[name=url]").value = obj[id].url;
+    document.querySelector("[name=username]").value = obj[id].username;
+    document.querySelector("[name=password]").value = obj[id].password;
+    document.querySelector("[name=hint]").value = obj[id].hint;
 }
 
 
 // <<<<<<<<<<<<<<<<<< CRUD - Delete >>>>>>>>>>>>>>>>>>>
-function deleteFromDB(key) {
-    localStorage.removeItem(key);
-    readAllFromDB();
+function deleteFromDB(key, id) {
+    const obj = JSON.parse(localStorage.getItem(key));
+    console.log(obj);
+    obj.splice(id - 1, 1);
+    readAllFromDB(key);
 }
 
-readAllFromDB();
+readAllFromDB('abir_hossain');

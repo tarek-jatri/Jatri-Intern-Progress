@@ -28,7 +28,11 @@
       <input type="password" name="password" required /><br />
       <label>Hint:</label>
       <input type="text" name="hint" required /><br />
-      <input type="submit" value="Submit" onclick="insertToDB()" />
+      <input
+        type="submit"
+        value="Submit"
+        onclick="insertToDB('abir_hossain')"
+      />
     </div>
 
     <br />
@@ -57,7 +61,9 @@
             <td>${obj.password}</td>
             <td>${obj.hint}</td>
             <td><button id="key" onclick="editToDB(key)">Edit</button></td>
-            <td><button id="key" onclick="deleteFromDB(key)">Delete</button></td>
+            <td>
+              <button id="key" onclick="deleteFromDB(key)">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>
