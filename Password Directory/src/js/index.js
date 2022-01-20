@@ -6,7 +6,9 @@ const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[-_.]{2})[^-_.].*[^-_.]$/g;
 
 const update = {
     value: false,
-    key: 0
+    key: '',
+    id: 0
+
 };
 
 
@@ -53,15 +55,18 @@ function clearInputFields() {
 function insertToDB(key) {
     if (!validateInput())
         return;
-    if (!localStorage.getItem(key))
-        localStorage.setItem(key, '[{}]');
-
+    if (update.value) {
+        updateTheObject(update.key, update.id);
+        update.value = false;
+        update.key = '';
+        update.id = 0;
+        return;
+    }
     const prevObj = JSON.parse(localStorage.getItem(key));
     const obj = createObject(prevObj.length);
     prevObj.push(obj);
 
     const strObj = JSON.stringify(prevObj);
-    // console.log(update);
     localStorage.setItem(key, strObj);
     readAllFromDB(key);
 }
@@ -89,7 +94,13 @@ function createObject(id) {
 
 // <<<<<<<<<<<<<<<<<< CRUD - Read >>>>>>>>>>>>>>>>>>>
 function readAllFromDB(key) {
-    const objects = JSON.parse(localStorage.getItem(key));
+    if (!localStorage.getItem(key))
+        localStorage.setItem(key, '[{}]');
+    console.log(key);
+    const str = localStorage.getItem(key);
+    console.log(str);
+    const objects = JSON.parse(str);
+    // console.log("asdasd ", JSON.parse(str)[1]);
     objects.shift();
     const objectsStr = objects
         .map(function (obj) {
@@ -104,8 +115,10 @@ function readAllFromDB(key) {
       </tr>`;
         })
         .join("");
-
+    console.log("Set timeout");
+    console.log("Asdasda");
     const tableBody = document.getElementById("tbody");
+    console.log(tableBody);
     tableBody.innerHTML = objectsStr;
 }
 
@@ -113,8 +126,9 @@ function readAllFromDB(key) {
 // <<<<<<<<<<<<<<<<<< CRUD - Update >>>>>>>>>>>>>>>>>>>
 function updateToDB(key, id) {
     setInputFields(key, id);
-    // update.value = true;
-    // update.key = key;
+    update.value = true;
+    update.key = key;
+    update.id = id;
 }
 
 
@@ -127,16 +141,54 @@ function setInputFields(key, id) {
     document.querySelector("[name=hint]").value = obj[id].hint;
 }
 
+function updateTheObject(key, id) {
+    const objects = JSON.parse(localStorage.getItem(key));
+    const name = document.querySelector("[name=name]").value.trim();
+    const url = document.querySelector("[name=url]").value.trim();
+    const username = document.querySelector("[name=username]").value.trim();
+    const password = document.querySelector("[name=password]").value.trim();
+    const hint = document.querySelector("[name=hint]").value.trim();
+
+    objects.forEach(obj => {
+        if (parseInt(obj.id) === parseInt(id)) {
+            obj.name = name;
+            obj.url = url;
+            obj.username = username;
+            obj.password = password;
+            obj.hint = hint;
+        }
+    });
+
+    const objStr = JSON.stringify(objects);
+    localStorage.setItem(key, objStr);
+    clearInputFields();
+    readAllFromDB(key);
+}
 
 // <<<<<<<<<<<<<<<<<< CRUD - Delete >>>>>>>>>>>>>>>>>>>
 function deleteFromDB(key, id) {
-    const obj = JSON.parse(localStorage.getItem(key));
-    console.log(obj);
-    obj.splice(id, 1);
-    console.log(obj);
-    const objStr = JSON.stringify(obj);
+    const objects = JSON.parse(localStorage.getItem(key));
+    const objects2 = objects.filter(obj => {
+        if (parseInt(obj.id) === parseInt(id)) {
+            return false;
+        }
+        return true;
+    });
+    const objStr = JSON.stringify(objects2);
     localStorage.setItem(key, objStr);
     readAllFromDB(key);
 }
 
-readAllFromDB('abir_hossain');
+function setSubmitKey(key) {
+    console.log(key);
+    console.dir(document);
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("ASDASD ", key);
+        document.querySelector("[name=submit]").addEventListener('click', function () {
+            insertToDB(key);
+        });
+        readAllFromDB(key);
+    });
+}
+
+// setSubmitKey("abir_hossain");
